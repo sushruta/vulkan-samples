@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# Directory holding model files
+models
+
+# Directory holding texture files
+textures
