@@ -16,9 +16,31 @@ There is code to read and load `.obj` models. Also, the code in the repository d
 bash download-models.sh
 ```
 
+## Prerequisite Frameworks
+
+You will need -
+
+* glfw
+* vulkan
+* glm
+* stb image processing
+* tinyobj loader
+
 ## Building the excutable
 
-All the code is in multiple header files and one cpp file. I have deliberately used only Makefile and targeted MacOS ecosystem. I do not use Xcode and therefore I needed a build system that didn't depend on Xcode. You should be able to make small modifications to it and be able to run it on linux as well. We may have to go the route of cmake if we want to true cross platform compatibility.
+All the code is in multiple header files and one cpp file.
+
+I have deliberately used only Makefile and targeted MacOS ecosystem. I do not use Xcode and therefore I needed a build system that didn't depend on Xcode. This means that there are some lines explcitly calling out Cocoa and IOKit. I have also assumed Vulkan SDK is installed to the right location.
+
+```
+VULKAN_DIR = /Users/sashidhar/VulkanSDK/1.3.224.0/macOS
+...
+...
+LDFLAGS = -L /usr/local/lib -L $(VULKAN_DIR)/lib -lvulkan -lglfw3
+FRAMEWORKFLAGS = -framework Cocoa -framework IOKit
+```
+
+You should be able to make small modifications to it and be able to run it on linux as well. We may have to go the route of cmake if we want to true cross platform compatibility.
 
 ```
 make clean; make build
