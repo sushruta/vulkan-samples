@@ -16,6 +16,11 @@
 #include <chrono>
 #include <iostream>
 
+const int maxFramesInFlight = 2;
+
+const std::string modelPath{"models/viking_room.obj"};
+const std::string texturePath{"textures/viking_room.png"};
+
 #include "helper.h"
 #include "container.h"
 #include "instance.h"
@@ -111,27 +116,34 @@ void VulkanApplication::initVulkan() {
     scg::createSurface(s_inst);
     scg::createDevice(s_inst, s_device);
     scg::createSwapchain(s_inst, s_device, s_swapchain);
+    
     scg::createImageViews(s_device, s_swapchain);
     scg::createRenderPass(s_device, s_swapchain, s_rpass);
     scg::createDescriptorSetLayout(s_device, s_descriptor);
     scg::createGraphicsPipeline(s_device, s_descriptor, s_rpass, s_gpipeline);
+    
+    // we are using surface from s_inst in scg::createCommandPool method
     scg::createCommandPool(s_inst, s_device, s_command);
+    
     scg::createDepthResources(s_device, s_swapchain, s_depth);
     scg::createFramebuffers(s_device, s_swapchain, s_rpass, s_depth, s_fbuf);
-    scg::createTextureImage(s_inst, s_device, s_command, s_texture);
+    scg::createTextureImage(s_device, s_command, s_texture);
     scg::createTextureImageView(s_device, s_texture);
     scg::createTextureSampler(s_device, s_texture);
     std::cout << "completed creating command buffers" << std::endl;
-    scg::loadModel(s_inst, s_geom);
+    scg::loadModel(s_geom);
     std::cout << "completed loading the obj model" << std::endl;
     scg::createVertexBuffer(s_device, s_command, s_geom);
     scg::createIndexBuffer(s_device, s_command, s_geom);
-    scg::createUniformBuffers(s_inst, s_device, s_ubuf);
-    scg::createDescriptorPool(s_inst, s_device, s_descriptor);
-    scg::createDescriptorSets(s_inst, s_device, s_descriptor, s_ubuf, s_texture);
+    scg::createUniformBuffers(s_device, s_ubuf);
+    scg::createDescriptorPool(s_device, s_descriptor);
+    scg::createDescriptorSets(s_device, s_descriptor, s_ubuf, s_texture);
     std::cout << "completed creating descriptor sets" << std::endl;
+
+    // we are using surface from s_inst in scg::createCommandBuffers method
     scg::createCommandBuffers(s_inst, s_device, s_command);
-    scg::createSynchObjects(s_inst, s_device, s_synch);
+    
+    scg::createSynchObjects(s_device, s_synch);
     std::cout << "completed synch objects" << std::endl;
 }
 

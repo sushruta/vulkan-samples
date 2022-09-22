@@ -9,13 +9,13 @@
 #include "container.h"
 
 namespace scg {
-    void createSynchObjects(scg::sInstance& s_inst, scg::sDevice& s_device, scg::sSynch& s_synch);
+    void createSynchObjects(scg::sDevice& s_device, scg::sSynch& s_synch);
 }
 
-void scg::createSynchObjects(scg::sInstance& s_inst, scg::sDevice& s_device, scg::sSynch& s_synch) {
-    s_synch.imageAvailableSemaphores.resize(s_inst.maxFramesInFlight);
-    s_synch.renderFinishedSemaphores.resize(s_inst.maxFramesInFlight);
-    s_synch.inFlightFences.resize(s_inst.maxFramesInFlight);
+void scg::createSynchObjects(scg::sDevice& s_device, scg::sSynch& s_synch) {
+    s_synch.imageAvailableSemaphores.resize(maxFramesInFlight);
+    s_synch.renderFinishedSemaphores.resize(maxFramesInFlight);
+    s_synch.inFlightFences.resize(maxFramesInFlight);
 
     VkSemaphoreCreateInfo semaphoreInfo{};
     semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
@@ -24,7 +24,7 @@ void scg::createSynchObjects(scg::sInstance& s_inst, scg::sDevice& s_device, scg
     fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
     fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
 
-    for (size_t i = 0; i < s_inst.maxFramesInFlight; i++) {
+    for (size_t i = 0; i < maxFramesInFlight; i++) {
         if (vkCreateSemaphore(s_device.device, &semaphoreInfo, nullptr, &(s_synch.imageAvailableSemaphores[i])) != VK_SUCCESS ||
                 vkCreateSemaphore(s_device.device, &semaphoreInfo, nullptr, &(s_synch.renderFinishedSemaphores[i])) != VK_SUCCESS ||
                 vkCreateFence(s_device.device, &fenceInfo, nullptr, &(s_synch.inFlightFences[i])) != VK_SUCCESS) {

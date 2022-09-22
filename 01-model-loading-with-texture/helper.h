@@ -38,7 +38,7 @@ namespace scg {
     VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger);
     void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator);
 
-    void loadModel(sInstance& s_inst, sGeometry& s_geom);
+    void loadModel(sGeometry& s_geom);
 }
 
 bool scg::isDeviceSuitable(VkPhysicalDevice& device, VkSurfaceKHR& surface, std::vector<const char*>& deviceExtensions) {
@@ -250,13 +250,13 @@ void scg::setupDebugMessenger(VkInstance& instance, VkDebugUtilsMessengerEXT& de
     }
 }
 
-void scg::loadModel(sInstance& s_inst, sGeometry& s_geom) {
+void scg::loadModel(sGeometry& s_geom) {
     tinyobj::attrib_t attrib;
     std::vector<tinyobj::shape_t> shapes;
     std::vector<tinyobj::material_t> materials;
     std::string warn, err;
 
-    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, s_inst.modelPath.c_str())) {
+    if (!tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, modelPath.c_str())) {
         throw std::runtime_error(warn + err);
     }
 

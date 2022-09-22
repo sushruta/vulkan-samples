@@ -14,7 +14,7 @@
 #include "swapchain.h"
 
 namespace scg {
-    void createTextureImage(scg::sInstance& s_inst, scg::sDevice& s_device, scg::sCommand& s_command, scg::sTexture& s_texture);
+    void createTextureImage(scg::sDevice& s_device, scg::sCommand& s_command, scg::sTexture& s_texture);
     void createTextureImageView(scg::sDevice& s_device, scg::sTexture& s_texture);
     void createTextureSampler(scg::sDevice& s_device, scg::sTexture& s_texture);
 }
@@ -47,9 +47,9 @@ void scg::createTextureImageView(scg::sDevice& s_device, scg::sTexture& s_textur
     s_texture.textureImageView = scg::createImageView(s_device, s_texture.textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 }
 
-void scg::createTextureImage(scg::sInstance& s_inst, scg::sDevice& s_device, scg::sCommand& s_command, scg::sTexture& s_texture) {
+void scg::createTextureImage(scg::sDevice& s_device, scg::sCommand& s_command, scg::sTexture& s_texture) {
     int texWidth, texHeight, texChannels;
-    stbi_uc* pixels = stbi_load(s_inst.texturePath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
+    stbi_uc* pixels = stbi_load(texturePath.c_str(), &texWidth, &texHeight, &texChannels, STBI_rgb_alpha);
     VkDeviceSize imageSize = texWidth * texHeight * 4;
     if (!pixels) {
         throw std::runtime_error("failed to load texture image!");

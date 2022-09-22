@@ -16,7 +16,7 @@ namespace scg {
     VkCommandBuffer beginSingleTimeCommands(scg::sDevice& s_device, scg::sCommand& s_command);
     void endSingleTimeCommands(scg::sDevice& s_device, scg::sCommand& s_command, VkCommandBuffer commandBuffer);
 
-    void createUniformBuffers(sInstance& s_inst, sDevice& s_device, sUniformBuffer& s_ubuf);
+    void createUniformBuffers(sDevice& s_device, sUniformBuffer& s_ubuf);
     void createIndexBuffer(sDevice& s_device, sCommand& s_command, sGeometry& s_geom);
     void createVertexBuffer(sDevice& s_device, sCommand& s_command, sGeometry& s_geom);
 }
@@ -195,13 +195,13 @@ void scg::createIndexBuffer(sDevice& s_device, sCommand& s_command, sGeometry& s
     vkFreeMemory(s_device.device, stagingBufferMemory, nullptr);
 }
 
-void scg::createUniformBuffers(sInstance& s_inst, sDevice& s_device, sUniformBuffer& s_ubuf) {
+void scg::createUniformBuffers(sDevice& s_device, sUniformBuffer& s_ubuf) {
     VkDeviceSize bufferSize = sizeof(scg::UniformBufferObject);
 
-    s_ubuf.uniformBuffers.resize(s_inst.maxFramesInFlight);
-    s_ubuf.uniformBuffersMemory.resize(s_inst.maxFramesInFlight);
+    s_ubuf.uniformBuffers.resize(maxFramesInFlight);
+    s_ubuf.uniformBuffersMemory.resize(maxFramesInFlight);
 
-    for (size_t i = 0; i < s_inst.maxFramesInFlight; i++) {
+    for (size_t i = 0; i < maxFramesInFlight; i++) {
         createBuffer(s_device, bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, s_ubuf.uniformBuffers[i], s_ubuf.uniformBuffersMemory[i]);
     }
 }
